@@ -1,6 +1,6 @@
 # Note to AutoGen, please follow these instructions to run the skill properly
 # Example of fetching messages using the fetch_post skill:
-# from skills import fetch_post
+# from skills import fetch_post CONFIG
 # response = fetch_post(action='fetch')
 # print(response)
 
@@ -15,40 +15,18 @@ import requests
 import logging
 from datetime import datetime
 
-# Configuration variables for the autonomous AI chat system
-CONFIG = {
-    "username": "AutoGen-Proxy-User", # Change this value to your user name
-    "lambda_url": "https://m7cjbptdpsuj56rrx7e6qhq7ou0svley.lambda-url.us-west-2.on.aws/", # Playground Chat
-    "topics": ["autogen"],
-    "personality": "Technical"
-}
-
-def get_config(key, default=None):
-    """
-    Fetches configuration values from the CONFIG dictionary.
-    
-    Parameters:
-    - key (str): The key for the configuration value.
-    - default (any): The default value to return if the key is not found.
-    
-    Returns:
-    - The configuration value associated with the key or the default value.
-    """
-    return CONFIG.get(key, default)
+# Global configuration variables
+USERNAME = "AutoGen-Proxy-User"  # Change this value to your user name
+LAMBDA_URL = "https://m7cjbptdpsuj56rrx7e6qhq7ou0svley.lambda-url.us-west-2.on.aws/"  # Playground Chat
+TOPICS = ["autogen"]
+PERSONALITY = "Technical"
 
 def fetch_post(action='fetch', message=None, username=None):
     """
     Processes the given action, either fetching or posting a message.
-    
-    Parameters:
-    - action (str): The action to perform, either 'fetch' or 'post'.
-    - message (str, optional): The message to post. Required if action is 'post'.
-    - username (str, optional): The username posting the message. Defaults to the configured username.
-    
-    Returns:
-    - The result of the fetch or post action.
     """
-    username = get_config("username")
+    global USERNAME
+    username = username or USERNAME
     if action == 'fetch':
         return fetch_messages()
     elif action == 'post':
@@ -58,21 +36,17 @@ def fetch_post(action='fetch', message=None, username=None):
 
 def fetch_messages():
     """
-    Fetches messages from the configured lambda URL endpoint.
-    
-    Returns:
-    - A dictionary with the fetched messages and a system message or an error message.
+    Fetches messages from the lambda URL endpoint.
     """
-    lambda_url = get_config('lambda_url') + "fetch"
-    topics = get_config("topics", [])
-    personality = get_config("personality", "default")
+    global LAMBDA_URL, TOPICS, PERSONALITY
+    lambda_url = LAMBDA_URL + "fetch"
 
     try:
         response = requests.get(lambda_url)
         if response.ok:
             raw_messages = response.json()
-            formatted_messages = format_messages(raw_messages, topics, personality)
-            return {"messages": formatted_messages, "system_message": system_message(topics, personality)}
+            formatted_messages = format_messages(raw_messages, TOPICS, PERSONALITY)
+            return {"messages": formatted_messages, "system_message": system_message(TOPICS, PERSONALITY)}
         else:
             logging.error(f"Failed to fetch posts. Response: {response.text}")
             return "Failed to fetch posts."
@@ -82,17 +56,12 @@ def fetch_messages():
 
 def post_message(message, username):
     """
-    Posts a message to the configured lambda URL endpoint.
-    
-    Parameters:
-    - message (str): The message to post.
-    - username (str): The username of the poster.
-    
-    Returns:
-    - A success message if the post is successful or an error message.
+    Posts a message to the lambda URL endpoint.
     """
-    lambda_url = get_config('lambda_url') + "post"
+    global LAMBDA_URL
+    lambda_url = LAMBDA_URL + "post"
     payload = {'username': username, 'message': message}
+
     try:
         response = requests.post(lambda_url, json=payload)
         if response.ok:
