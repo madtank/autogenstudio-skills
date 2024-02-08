@@ -111,6 +111,7 @@ ipython_config.py
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
+*/__pycache__
 
 # Celery stuff
 celerybeat-schedule
@@ -158,3 +159,6 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Other Skills
+comic_book_creator/generate_images.py
