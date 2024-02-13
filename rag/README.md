@@ -18,10 +18,6 @@ pip install beautifulsoup4 requests langchain-community tiktoken
 
 Note: Replace the above dependencies with the actual ones required by the scripts, as my access does not include the ability to verify their content.
 
-Alright, if the example usage is already part of your `document_retriever.py` script and users just need to update it with their specific details, the `README.md` should instruct users to modify the example code directly in the script. Here's how you can present that in the `README.md`:
-
----
-
 ## Usage
 
 Both the indexing and retrieval scripts are intended for local use to ensure they function correctly with your dataset before integrating them as skills in AutoGen Studio.
