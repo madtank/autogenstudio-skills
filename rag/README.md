@@ -18,27 +18,37 @@ pip install beautifulsoup4 requests langchain-community tiktoken
 
 Note: Replace the above dependencies with the actual ones required by the scripts, as my access does not include the ability to verify their content.
 
+Alright, if the example usage is already part of your `document_retriever.py` script and users just need to update it with their specific details, the `README.md` should instruct users to modify the example code directly in the script. Here's how you can present that in the `README.md`:
+
+---
+
 ## Usage
+
+Both the indexing and retrieval scripts are intended for local use to ensure they function correctly with your dataset before integrating them as skills in AutoGen Studio.
 
 ### Document Indexing
 
-To index your documents, navigate to the directory containing `document_indexer.py` and run:
+To index your documents for the first time or to update the index:
 
-```bash
-python document_indexer.py --doc_path "/path/to/documents"
-```
-
-Replace `/path/to/documents` with the actual path to your documents. The script will process and index the documents, preparing them for retrieval.
+1. Add any new document files to the `documents` directory.
+2. Run the `document_indexer.py` script, which will automatically index the documents and update the `knowledge` folder.
 
 ### Document Retrieval
 
-After indexing, you can retrieve documents by running `document_retriever.py` with a query:
+The `document_retriever.py` script contains a sample usage example at the bottom of the file. To test document retrieval:
+
+1. Open `document_retriever.py` in a text editor.
+2. Locate the example usage section.
+3. Update the `query`, `size`, and `target_length` variables with the details relevant to your search.
+4. Save the changes and run the script:
 
 ```bash
-python document_retriever.py --query "example search query"
+python document_retriever.py
 ```
 
-The script will return documents that match the query based on the indexes created earlier.
+This will execute the retrieval function with your specified parameters and print the results.
+
+After confirming the scripts work with your local setup, you can upload them as skills to AutoGen Studio, ensuring the `index_folder` parameter correctly points to your knowledge base.
 
 ## Integration with AutoGenStudio
 
