@@ -16,8 +16,6 @@ Before using these skills, ensure you have the required dependencies installed. 
 pip install beautifulsoup4 requests langchain-community tiktoken
 ```
 
-Note: Replace the above dependencies with the actual ones required by the scripts, as my access does not include the ability to verify their content.
-
 ## Usage
 
 Both the indexing and retrieval scripts are intended for local use to ensure they function correctly with your dataset before integrating them as skills in AutoGen Studio.
