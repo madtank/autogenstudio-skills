@@ -1,6 +1,7 @@
 import json
 import os
 import pickle
+import argparse
 
 try:
     import tiktoken
@@ -103,13 +104,30 @@ class DocumentRetriever:
             )
         return expanded_chunks
 
-
 # Example usage
 if __name__ == "__main__":
+    # Set up command line argument parsing
+    parser = argparse.ArgumentParser(description='Retrieve documents based on a query.')
+    parser.add_argument('query', nargs='?', type=str, help='The query to retrieve documents for.')
+    args = parser.parse_args()
+
+    # Check if query was provided
+    if not args.query:
+        parser.print_help()
+        print("Error: No query provided.")
+        exit(1)
+
     # Initialize with the path to your index folder
-    retriever = DocumentRetriever(index_folder="knowledge")
-    query = "What is autogenstudio?"
+    index_folder = "knowledge"
+    retriever = DocumentRetriever(index_folder)
+
+    # Use the query from the command line arguments
+    query = args.query
     size = 5  # Number of results to retrieve
     target_length = 256  # Target length of expanded content
+    
+    # Retrieve documents based on the query
     results = retriever(query, size, target_length)
+    
+    # Print the results
     print(results)
