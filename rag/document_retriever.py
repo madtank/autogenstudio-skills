@@ -1,6 +1,6 @@
-import json
 import os
 import pickle
+import json
 import argparse
 
 try:
@@ -10,6 +10,11 @@ try:
 except ImportError:
     raise ImportError("Please install langchain-community first.")
 
+# Configuration - Users/AI skill developers must update this path to their specific index folder
+# To test with sample data set index_folder to "knowledge"
+CONFIG = {
+    "index_folder": "path/to/your/knowledge/directory",  # TODO: Update this path before using
+}
 
 class DocumentRetriever:
     def __init__(self, index_folder):
@@ -104,30 +109,27 @@ class DocumentRetriever:
             )
         return expanded_chunks
 
-# Example usage
+# Example Usage
 if __name__ == "__main__":
-    # Set up command line argument parsing
     parser = argparse.ArgumentParser(description='Retrieve documents based on a query.')
     parser.add_argument('query', nargs='?', type=str, help='The query to retrieve documents for.')
     args = parser.parse_args()
 
-    # Check if query was provided
     if not args.query:
         parser.print_help()
         print("Error: No query provided.")
         exit(1)
 
-    # Initialize with the path to your index folder
-    index_folder = "knowledge"
-    retriever = DocumentRetriever(index_folder)
+    # Ensure the index_folder path is correctly set in CONFIG before proceeding
+    index_folder = CONFIG["index_folder"]
+    if index_folder == "path/to/your/knowledge/directory":
+        print("Error: Index folder in CONFIG has not been set. Please update it to your index folder path.")
+        exit(1)
 
-    # Use the query from the command line arguments
+    # Instantiate and use the DocumentRetriever with the configured index folder
+    retriever = DocumentRetriever(index_folder=index_folder)
     query = args.query
     size = 5  # Number of results to retrieve
     target_length = 256  # Target length of expanded content
-    
-    # Retrieve documents based on the query
     results = retriever(query, size, target_length)
-    
-    # Print the results
     print(results)
