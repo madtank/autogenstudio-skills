@@ -27,26 +27,61 @@ To index your documents for the first time or to update the index:
 1. Add any new document files to the `documents` directory.
 2. Run the `document_indexer.py` script, which will automatically index the documents and update the `knowledge` folder.
 
-### Document Retrieval
+### Document Retrieval Usage Instructions
 
-The `document_retriever.py` script contains a sample usage example at the bottom of the file. To test document retrieval:
+The `document_retriever.py` script facilitates the retrieval of documents based on a specified query. Follow the steps below to utilize the script for your document retrieval needs:
 
-1. Open `document_retriever.py` in a text editor.
-2. Locate the example usage section.
-3. Update the `query`, `size`, and `target_length` variables with the details relevant to your search.
-4. Save the changes and run the script:
+1. **Prepare the Environment:**
+   Ensure that all necessary dependencies are installed, including `tiktoken`, `langchain-community`, `FAISS`, and `HuggingFaceEmbeddings`. If you haven't installed these yet, use `pip` to install them or refer to their respective documentation for installation instructions.
 
-```bash
-python document_retriever.py
-```
+2. **Configure the Index Path:**
+   Before running the script, make sure to set the `index_folder` in the CONFIG variable to point to the directory containing your FAISS index and the `chunk_id_to_index.pkl` file.
 
-This will execute the retrieval function with your specified parameters and print the results.
+3. **Set Up the Query Parameters:**
+   - Open the `document_retriever.py` file in your preferred text editor.
+   - Scroll to the bottom of the file and locate the `if __name__ == "__main__":` section.
+   - Within this section, you will find the `query`, `size`, and `target_length` parameters.
+   - Modify the `query` parameter to reflect the text you want to search for.
+   - Adjust the `size` parameter to control the number of results you want to retrieve.
+   - Set the `target_length` parameter to determine the length of text surrounding your query match within the retrieved documents.
 
-After confirming the scripts work with your local setup, you can upload them as skills to AutoGen Studio, ensuring the `index_folder` parameter correctly points to your knowledge base.
+4. **Execution:**
+   - Save the file after making the necessary changes.
+   - Run the script from the command line by executing `python document_retriever.py` followed by your search query in quotes (e.g., `python document_retriever.py "example search query"`).
+   - If your setup is correct, the script will output the retrieved documents formatted in JSON.
 
-## Integration with AutoGenStudio
 
-These skills can be integrated into AutoGenStudio workflows by defining them as custom skills within the AutoGenStudio environment. Refer to the AutoGenStudio documentation on how to incorporate custom Python scripts as skills.
+Certainly, here's a streamlined update for integrating the `document_retriever.py` skill into AutoGenStudio, focusing on the Build > Skills section:
+
+---
+
+## Integration with AutoGenStudio for GPT-4
+
+To integrate the `document_retriever.py` skill with AutoGenStudio for use in GPT-4 workflows:
+
+1. **Create a New Skill:**
+   - Navigate to the Build > Skills section within AutoGenStudio.
+   - Create a new skill and give it a relevant name that easily identifies its purpose, such as "Document Retriever".
+
+2. **Add the Python Script:**
+   - Copy the content of the `document_retriever.py` script into the code area of the new skill.
+   - Ensure that the script is complete and correctly formatted to run as a standalone skill within the AutoGenStudio environment.
+
+3. **Configure the Index Path:**
+   - Locate the CONFIG variable within the script.
+   - Update the `"index_folder"` key to point to your specific directory containing the FAISS index and associated files. This path must be accessible from within the AutoGenStudio environment.
+
+5. **Incorporate Into Workflow:**
+   - Once testing is successful, incorporate the skill into your desired workflow.
+   - Set up instructions within the agent that will prompt the skill to execute when needed.
+
+### Additional Notes:
+
+- Ensure that the path to the `index_folder` is accessible from the environment where the script is being run.
+- If any changes are made to the indexing structure or if new documents are added to the database, make sure to update the FAISS index accordingly.
+- The output is in JSON format for easy integration with other systems or for further processing.
+
+By following these instructions, you should be able to successfully retrieve documents using the `document_retriever.py` script. If you encounter any issues, review the configuration steps to ensure all settings are correct.
 
 ## Contributing
 
