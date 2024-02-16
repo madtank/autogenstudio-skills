@@ -50,11 +50,6 @@ The `document_retriever.py` script facilitates the retrieval of documents based 
    - Run the script from the command line by executing `python document_retriever.py` followed by your search query in quotes (e.g., `python document_retriever.py "example search query"`).
    - If your setup is correct, the script will output the retrieved documents formatted in JSON.
 
-
-Certainly, here's a streamlined update for integrating the `document_retriever.py` skill into AutoGenStudio, focusing on the Build > Skills section:
-
----
-
 ## Integration with AutoGenStudio for GPT-4
 
 To integrate the `document_retriever.py` skill with AutoGenStudio for use in GPT-4 workflows:
@@ -74,6 +69,46 @@ To integrate the `document_retriever.py` skill with AutoGenStudio for use in GPT
 5. **Incorporate Into Workflow:**
    - Once testing is successful, incorporate the skill into your desired workflow.
    - Set up instructions within the agent that will prompt the skill to execute when needed.
+
+## Integration with AutoGenStudio for GPT-4 and Skill Execution Monitoring
+
+To ensure that your AI agents in AutoGenStudio effectively utilize the `document_retriever.py` skill and to monitor their performance, follow the steps below:
+
+### User Guide for Monitoring Skill Execution
+
+1. **Monitoring Execution:**
+   - When the AI agent is running, open a terminal or command prompt.
+   - Use logging statements in your Python script to output status messages that provide insight into the agent's actions and any issues that may occur.
+   - If the agent encounters errors, the terminal will display error messages which can assist in troubleshooting.
+
+### Agent System Message Update for Skill Execution
+
+2. **Instructions for the AI Agent:**
+   - In the system message that the agent reads before execution, include instructions on how to properly call and execute the `document_retriever.py` skill.
+   - For example: "To retrieve documents, instantiate the `DocumentRetriever` with the index folder path and call the retrieval method with the specified query parameters."
+   - Remind the agent to log all actions in the terminal for monitoring purposes, especially when issues are encountered.
+
+### Example Code for Agent Execution
+
+```python
+# filename: retrieve_autogen_info.py
+from skills import DocumentRetriever
+
+# Configuration - Set the path to the index folder
+index_folder = "path/to/my/index" # replace with your actual path
+
+# Instantiate the DocumentRetriever with the configured index folder
+retriever = DocumentRetriever(index_folder=index_folder)
+
+# Define the query for "autogen"
+query = "autogen"
+size = 5  # Number of results to retrieve
+target_length = 256  # Target length of expanded content
+
+# Retrieve documents related to "autogen"
+results = retriever.retrieve_documents(query, size, target_length)
+print(results)
+```
 
 ### Additional Notes:
 

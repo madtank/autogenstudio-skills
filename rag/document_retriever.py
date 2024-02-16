@@ -13,7 +13,7 @@ except ImportError:
 # Configuration - Users/AI skill developers must update this path to their specific index folder
 # To test with sample data set index_folder to "knowledge"
 CONFIG = {
-    "index_folder": "path/to/your/knowledge/directory",  # TODO: Update this path before using
+    "index_folder": "rag/knowledge",  # TODO: Update this path before using
 }
 
 class DocumentRetriever:
