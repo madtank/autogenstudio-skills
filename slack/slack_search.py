@@ -12,7 +12,7 @@ class SlackSearcher:
         self.base_url = "https://slack.com/api"
         self.headers = {"Authorization": f"Bearer {self.api_token}"}
         # Replace these example channel names with the actual channel names you want to search
-        self.channel_names = ["random", "general"]
+        self.channel_names = ["general", "random"]
 
     def search(self, query):
         query_with_channels = self.build_query_with_channels(query)
@@ -34,9 +34,9 @@ class SlackSearcher:
             simplified_output = []
             for message in data['messages']['matches']:
                 simplified_message = {
-                    "user": message['username'],
-                    "text": message['text']
-#                    "permalink": message['permalink']
+                    "user": message['user'],
+                    "text": message['text'],
+                    "permalink": message['permalink']
                 }
                 thread_ts = self.extract_thread_ts(message['permalink'])
                 if thread_ts:
@@ -70,7 +70,7 @@ class SlackSearcher:
         for message in response.json()['messages']:
             if message['ts'] != thread_ts:  # Exclude the parent message
                 thread_messages.append({
-                    "user": message.get('username', 'Unknown'),
+                    "user": message['user'],
                     "text": message['text']
                 })
         return thread_messages
