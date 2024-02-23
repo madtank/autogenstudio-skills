@@ -38,7 +38,6 @@ To integrate the `stackoverflow_teams.py` skill with AutoGenStudio for use in GP
 2. **Add the Python Script:**
    - Copy the content of the `stackoverflow_teams.py` script into the code area of the new skill.
    - Ensure that the script is complete and correctly formatted to run as a standalone skill within the AutoGenStudio environment.
-   - Ensure `yourteamname` is set to your team name in the script
 
 3. **Configure your Team Name:**
    - Locate the team_name variable within the script and set it to your team name.
