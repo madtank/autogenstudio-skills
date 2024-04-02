@@ -36,7 +36,7 @@ class TestHoops():
     
     return row_data
 
-url= "https://contactcenter.microsoft.com/Hoops/DayExceptions"  
+url= "https://contactcenter.microsoft.com/CallRouting/QueueMessageTypes"
 test = TestHoops()
 test.setup_method(url)
 test.test_hoops()
