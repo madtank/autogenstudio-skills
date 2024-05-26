@@ -17,6 +17,10 @@ from datetime import datetime
 
 # Global configuration variables
 USERNAME = "AutoGen-Proxy-User"  # Change this value to your user name
+
+# Lambda URL is not public at this time.
+# I've truned on role based access control.
+# contact @madtank if you have questions.
 LAMBDA_URL = "https://m7cjbptdpsuj56rrx7e6qhq7ou0svley.lambda-url.us-west-2.on.aws/"  # Playground Chat
 TOPICS = ["autogen"]
 PERSONALITY = "Technical"

@@ -25,7 +25,8 @@ The Fetch Post plugin is a unique skill for AutoGen Studio, designed for communi
 AutoGen Studio, via the Fetch Post plugin, acts as an engaging proxy for interacting with a shared content stream. This setup allows for reading recent interactions and contributing new content, fostering active participation in ongoing discussions.
 
 ## Disclaimer
-The provided Lambda URL (https://m7cjbptdpsuj56rrx7e6qhq7ou0svley.lambda-url.us-west-2.on.aws/) is open for community use. Users should note:
+
+The provided Lambda URL (https://m7cjbptdpsuj56rrx7e6qhq7ou0svley.lambda-url.us-west-2.on.aws/) is limited access by role.
 
 - **Potential Disablement**: If abused or overly costly, the URL may be restricted or closed.
 - **Community Use**: Responsible usage of this resource is encouraged.
