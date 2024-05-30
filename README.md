@@ -33,6 +33,12 @@ Skills in this repository are contributed by the community and are not official 
 
 For support, feedback, or queries regarding specific skills, please refer to the respective documentation or contact the skill's contributor.
 
+### File Upload and Image Viewing
+
+AutoGen Studio now supports uploading a file and viewing the image using a vision plug-in. This new feature allows users to easily upload images and view them within the application, enhancing the interactive capabilities of AutoGen Studio.
+
+For detailed instructions on how to use this feature, including integration with the vision plug-in for image viewing, please refer to the `file_upload_and_view.py` script and the `vision_plugin_integration.md` documentation.
+
 ---
 
 Embrace the power of collaborative innovation with the AutoGen Studio Skills Repository!
