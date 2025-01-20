@@ -1,4 +1,4 @@
-async def mcp(server: str, tool: str, query: str = None, path: str = None) -> str:
+async def mcp(server: str, tool: str, query: str = None, path: str = None, input: str = None, memoryId: str = None) -> str:
     try:
         import json
         import asyncio
@@ -37,12 +37,15 @@ async def mcp(server: str, tool: str, query: str = None, path: str = None) -> st
         env = os.environ.copy()
         env.update(config.get('env', {}))
 
-        # Build arguments
+        # Build arguments based on tool
         args = {}
-        if query is not None:
+        if tool == "brave_web_search" and query:
             args['query'] = query
-        if path is not None:
-            args['path'] = path
+        elif tool == "ask_agent":
+            if input:
+                args['input'] = input
+            if memoryId:
+                args['memoryId'] = memoryId
 
         # Execute tool
         async with stdio_client(StdioServerParameters(command=command, args=config.get('args', []), env=env)) as (read, write):
@@ -53,19 +56,3 @@ async def mcp(server: str, tool: str, query: str = None, path: str = None) -> st
 
     except Exception as e:
         return f"Error: {str(e)}"
-
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) < 3:
-        print("Usage: python mcp.py <server> <tool> [query] [path]")
-        sys.exit(1)
-    
-    args = sys.argv[1:]
-    kwargs = {}
-    if len(args) > 2:
-        kwargs['query'] = args[2]
-    if len(args) > 3:
-        kwargs['path'] = args[3]
-        
-    result = asyncio.run(mcp(args[0], args[1], **kwargs))
-    print(result)

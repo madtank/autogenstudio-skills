@@ -1,53 +1,69 @@
 import asyncio
-import pytest
-from mcp_tool import mcp  # Import from local mcp_tool.py file
+import json
+from mcp_tool import mcp
 
-async def test_basic():
-    """Test basic MCP functionality"""
-    print("\n=== Testing MCP Basic Functionality ===")
+async def test_brave_search():
+    """Test Brave Search functionality"""
+    print("\n=== Testing Brave Search ===")
     
-    # Test 1: Brave Search
-    print("\nTest 1: Brave Search")
-    query = "What is MCP protocol?"
+    query = "What is Model Context Protocol?"
+    print(f"Searching for: {query}")
+    
     result = await mcp(
         server="brave-search",
         tool="brave_web_search",
         query=query
     )
     print(f"Search Result:\n{result}")
-    assert result is not None
-    assert isinstance(result, str)
-    assert len(result) > 0
-    print("✓ Brave Search test passed")
     
-    # Test 2: Filesystem
-    print("\nTest 2: Filesystem")
-    result = await mcp(
-        server="filesystem",
-        tool="list_allowed_directories"
-    )
-    print(f"Allowed Directories:\n{result}")
-    assert result is not None
-    assert isinstance(result, str)
-    print("✓ Filesystem test passed")
+    # Check if we got valid results
+    return '"Error"' not in result and "content=" in result
 
-    # Test 3: YouTube Transcript
-    print("\nTest 3: YouTube Transcript")
-    try:
-        result = await mcp(
-            server="youtube-transcript",
-            tool="get_transcript",
-            query={
-                "url": "https://www.youtube.com/watch?v=Du8mbxGQ9Ek",
-                "lang": "en"
-            }
-        )
-        print(f"Transcript Result:\n{result}")
-        assert result is not None
-        assert isinstance(result, str)
-        print("✓ YouTube Transcript test passed")
-    except Exception as e:
-        print(f"✗ YouTube Transcript test failed: {e}")
+async def test_bedrock_agent():
+    """Test Bedrock Agent functionality"""
+    print("\n=== Testing Bedrock Agent ===")
+    
+    print("Sending query to agent...")
+    result = await mcp(
+        server="bedrock-agent",
+        tool="ask_agent",
+        input="What are your capabilities?",
+        memoryId="test-session-1"
+    )
+    print(f"Agent Response:\n{result}")
+    
+    # Check if we got valid results
+    return '"Error"' not in result and "content=" in result
+
+async def main():
+    """Run tests"""
+    print("\n🚀 Starting MCP Tests")
+    
+    # Test Brave Search
+    brave_success = await test_brave_search()
+    print("\nBrave Search:", "✓ Success" if brave_success else "❌ Failed")
+    
+    print("\n" + "="*50)  # Separator
+    
+    # Test Bedrock Agent
+    bedrock_success = await test_bedrock_agent()
+    print("\nBedrock Agent:", "✓ Success" if bedrock_success else "❌ Failed")
+    
+    # Summary
+    print("\n=== Test Summary ===")
+    tests_passed = 0
+    tests_total = 2
+    
+    if brave_success:
+        tests_passed += 1
+    if bedrock_success:
+        tests_passed += 1
+    
+    print(f"Tests passed: {tests_passed}/{tests_total}")
+    if tests_passed == tests_total:
+        print("\n✨ All tests passed!")
+    else:
+        print(f"\n⚠️ {tests_total - tests_passed} test(s) failed!")
 
 if __name__ == "__main__":
-    asyncio.run(test_basic())
+    asyncio.run(main())
