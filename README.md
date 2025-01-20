@@ -1,61 +1,59 @@
 # AutoGen Studio Skills Repository
 
-## Brief Introduction to AutoGen Studio
-
-AutoGen Studio is an innovative platform designed for creating and managing multi-agent workflows. It offers a user-friendly interface for prototyping and integrating various agents, enabling users to build complex, automated systems with ease.
+## Overview
+This repository houses tools and integrations for AutoGen Studio, with a focus on Model Context Protocol (MCP) integration in V4. Our implementation emphasizes discoverable, self-describing tools that AI agents can understand and use effectively.
 
 ## Repository Structure
 
-This repository contains tools for different versions of AutoGen Studio:
+### V4 Directory (`/v4`)
+Features MCP-integrated tools built on a "discovery-first" architecture:
+- Tools describe their own capabilities and parameters
+- AI agents learn tool usage through built-in discovery mechanisms
+- Focused on core capabilities with room for expansion
+
+Current focus:
+- **Brave Search**: Web search capabilities
+- **Filesystem Operations**: Secure file handling
+- **Tool Discovery**: Self-describing tool interfaces
 
 ### V2 Directory (`/v2`)
-Contains tools compatible with AutoGen Studio V2, including:
-- Fetch Post
-- RAG (Retrieval-Augmented Generation)
-- Slack Integration
-- Stack Overflow Teams Integration
-- Story Mode
-- Tool Kit
-- Web Search
+Legacy tools for AutoGen Studio V2 (see v2/README.md for details)
 
-### V4 Directory (`/v4`)
-Features next-generation tools built for AutoGen Studio V4, including:
-- **Calculator**: Simple arithmetic operations
-- **Website Fetcher**: Async URL content fetching
-- **MCP Integration**: Universal tool connectivity through Model Context Protocol
+## Development Philosophy
 
-#### What is MCP?
-MCP (Model Context Protocol) acts as a "USB for AI tools" - providing a standardized way for AI models to interact with external tools and data sources. This makes it easier to connect AutoGen Studio to any service that implements the MCP protocol.
+### Discovery-First Design
+Our V4 tools are built around the principle that AI agents should:
+1. Discover available tools
+2. Learn tool capabilities and parameters
+3. Use tools appropriately based on their documentation
 
-## Using the Skills
+This approach:
+- Makes tools self-documenting
+- Reduces errors through parameter validation
+- Scales naturally as new tools are added
 
-To use these skills in your AutoGen Studio projects:
-
-1. Choose the appropriate version directory (v2 or v4) based on your AutoGen Studio version
-2. Follow the version-specific README and documentation
-3. Integrate the tools following the provided instructions
+### Development Workflow
+1. Update and test core functionality in `mcp_tool.py`
+2. Verify with Python tests (`test_mcp.py`)
+3. Update AutoGen Studio integration in `mcp.json`
+4. Validate with integration tests (`test_tools.py`)
 
 ## Contributing
 
-Contributions to this repository are welcome. Please:
-1. Place your contributions in the appropriate version directory
-2. Follow the existing structure and documentation patterns
-3. Include clear usage instructions and examples
+### Adding New Tools
+1. Start with `mcp_tool.py` for core implementation
+2. Ensure tool is self-describing through MCP
+3. Add appropriate tests
+4. Create AutoGen Studio integration
+5. Update documentation
 
-## Testing
+### Testing
+Each version includes specific testing tools:
+- V4: Comprehensive test suite in `test_mcp.py` and `test_tools.py`
+- V2: Individual tool test suites
 
-Each version directory includes testing instructions and tools:
-- V2: Refer to individual tool documentation
-- V4: Use the included test_tools.py script
-
-## Support and Feedback
-
-For support, feedback, or queries regarding specific skills, please refer to the respective documentation or contact the skill's contributor.
+## Getting Started
+See `/v4/README.md` for detailed setup and usage instructions.
 
 ## License
-
 This project is licensed under the terms specified in the LICENSE file.
-
----
-
-Embrace the power of collaborative innovation with the AutoGen Studio Skills Repository!

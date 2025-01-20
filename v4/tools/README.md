@@ -1,67 +1,97 @@
-# MCP Tool Implementation
+# MCP Tool Implementation Guide
 
-## Overview
-This implementation of the Model Context Protocol (MCP) tool focuses on two core functionalities:
-1. Web search capabilities via Brave Search
-2. Secure filesystem operations
+## Discovery-First Implementation
+This implementation of the Model Context Protocol (MCP) emphasizes self-discovering, self-documenting tools. All functionality is discoverable through the protocol itself.
 
-## Brave Search Operations
-
-### Web Search
+### Tool Discovery
 ```python
-# Basic web search
+# 1. List available servers
+servers = await mcp(tool='list_available_servers')
+
+# 2. Get tool details
+tools = await mcp(server='server_name', tool='tool_details')
+```
+
+IMPORTANT: AI agents must always:
+1. Check tool availability first
+2. Get tool details before use
+3. Provide clear summaries of tool results
+
+## Core Features
+
+### 1. Brave Search
+```python
+# First: Get tool details
+details = await mcp(server="brave-search", tool="tool_details")
+
+# Then: Use the tool
 result = await mcp(
     server="brave-search",
     tool="brave_web_search",
     query="search query",
     count=3  # Optional: limit results
 )
+
+# Always explain results to user
+"""
+I found 3 relevant results about [topic]:
+1. [First result summary]
+2. [Second result summary]
+3. [Third result summary]
+"""
 ```
 
-## Filesystem Operations
+### 2. Filesystem Operations
 
-### Available Tools
+#### Available Tools
+```python
+# List Allowed Directories
+result = await mcp(
+    server="filesystem",
+    tool="list_allowed_directories"
+)
 
-1. **List Allowed Directories**
-   ```python
-   result = await mcp(
-       server="filesystem",
-       tool="list_allowed_directories"
-   )
-   ```
+# List Directory Contents
+result = await mcp(
+    server="filesystem",
+    tool="list_directory",
+    path="/path/to/directory"
+)
 
-2. **List Directory Contents**
-   ```python
-   result = await mcp(
-       server="filesystem",
-       tool="list_directory",
-       path="/path/to/directory"
-   )
-   ```
+# Read File
+result = await mcp(
+    server="filesystem",
+    tool="read_file",
+    path="/path/to/file"
+)
 
-3. **Read File**
-   ```python
-   result = await mcp(
-       server="filesystem",
-       tool="read_file",
-       path="/path/to/file"
-   )
-   ```
+# Get File Info
+result = await mcp(
+    server="filesystem",
+    tool="get_file_info",
+    path="/path/to/file"
+)
+```
 
-4. **Get File Info**
-   ```python
-   result = await mcp(
-       server="filesystem",
-       tool="get_file_info",
-       path="/path/to/file"
-   )
-   ```
+Always explain results:
+```python
+"""
+The directory contains:
+- 3 subdirectories: [names]
+- 5 files: [names]
+"""
+
+"""
+The file contains documentation about [topic], 
+including sections on [key points]
+"""
+```
 
 ### Allowed Directories
 - `/Users/jacob/claude_home`
 - `/Users/jacob/Library/Application Support/Claude`
 
-## Implementation Notes
+## Implementation Details
 
 ### Core Function
 ```python
@@ -72,46 +102,65 @@ async def mcp(
     path: str = None,   # File/directory path
     count: int = None   # Result count for search
 ) -> str:
+    """Docstring is crucial - it teaches agents:
+    1. How to discover tools
+    2. How to use tool_details
+    3. How to interpret results
+    """
 ```
 
 ### Testing Strategy
 
-1. **Direct Python Testing**
-   ```bash
-   python v4/tests/test_mcp.py
-   ```
-   Tests both Brave Search and filesystem operations.
+1. **Core Testing** (`test_mcp.py`)
+   - Tool discovery tests
+   - Core functionality tests
+   - Result handling tests
 
-2. **JSON Implementation Testing**
-   ```bash
-   python v4/tests/test_mcp_json.py
-   ```
-   Validates the JSON implementation matches Python functionality.
+2. **Integration Testing** (`test_mcp_json.py`)
+   - AutoGen Studio compatibility
+   - Agent interaction patterns
+   - End-to-end workflows
 
 ## Development Guidelines
 
-1. **Tool-Specific Features**
-   - Brave Search: Focus on query formatting and result parsing
-   - Filesystem: Ensure safe file operations within allowed directories
+### Adding New Tools
+1. **Discovery Support**
+   - Implement tool_details
+   - Clear parameter descriptions
+   - Usage examples
 
-2. **Testing**
-   - Group tests by tool type
-   - Include both success and error cases
-   - Verify proper error handling
-   - Test with realistic inputs
+2. **Result Handling**
+   - Clear result formats
+   - Example summaries
+   - Error handling
 
-3. **Error Handling**
-   - Return clear error messages
-   - Handle network issues (Brave Search)
-   - Check file permissions (Filesystem)
-   - Validate all inputs
+3. **Testing**
+   - Discovery tests
+   - Functionality tests
+   - Result explanation tests
 
-## Adding New Features
+### Modifying Existing Tools
+1. Update tool details first
+2. Maintain backward compatibility
+3. Update result handling
+4. Update tests
 
-When adding new features:
+## Best Practices
 
-1. Determine appropriate tool category
-2. Add tool-specific argument handling
-3. Update tests with new cases
-4. Document usage and examples
-5. Verify both Python and JSON implementations
+### Tool Documentation
+- Clear parameter descriptions
+- Usage examples
+- Result format examples
+- Error handling guidance
+
+### Agent Interaction
+- Always check tool details
+- Validate parameters
+- Explain results clearly
+- Handle errors gracefully
+
+### Testing
+- Test discovery first
+- Verify parameter handling
+- Check result explanations
+- Test error cases
