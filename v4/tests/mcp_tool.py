@@ -1,4 +1,15 @@
-async def mcp(server: str, tool: str, query: str = None, path: str = None, input: str = None, memoryId: str = None) -> str:
+async def mcp(server: str, tool: str, query: str = None, path: str = None, count: int = None) -> str:
+    """Execute an MCP tool with focus on Brave Search and filesystem operations.
+    
+    Tool examples:
+    - Brave Search:
+        - brave_web_search: Search the web (query, count)
+    - Filesystem:
+        - list_allowed_directories: Shows accessible directories
+        - list_directory: Lists contents of directory (path)
+        - read_file: Reads file content (path)
+        - get_file_info: Gets file metadata (path)
+    """
     try:
         import json
         import asyncio
@@ -39,13 +50,12 @@ async def mcp(server: str, tool: str, query: str = None, path: str = None, input
 
         # Build arguments based on tool
         args = {}
-        if tool == "brave_web_search" and query:
+        if path is not None:
+            args['path'] = path
+        if query is not None:
             args['query'] = query
-        elif tool == "ask_agent":
-            if input:
-                args['input'] = input
-            if memoryId:
-                args['memoryId'] = memoryId
+        if count is not None:
+            args['count'] = count
 
         # Execute tool
         async with stdio_client(StdioServerParameters(command=command, args=config.get('args', []), env=env)) as (read, write):

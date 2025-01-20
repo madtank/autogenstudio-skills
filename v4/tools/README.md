@@ -1,58 +1,117 @@
 # MCP Tool Implementation
 
 ## Overview
-This implementation of the Model Context Protocol (MCP) tool focuses on providing reliable access to key MCP servers, with specific argument handling for each tool type.
+This implementation of the Model Context Protocol (MCP) tool focuses on two core functionalities:
+1. Web search capabilities via Brave Search
+2. Secure filesystem operations
 
-## Supported Servers & Tools
+## Brave Search Operations
 
-### Brave Search
-- **Server**: `brave-search`
-- **Tools**:
-  - `brave_web_search`
-    - Arguments: `query` (required), `count` (optional)
-    - Example: `mcp(server="brave-search", tool="brave_web_search", query="search term")`
+### Web Search
+```python
+# Basic web search
+result = await mcp(
+    server="brave-search",
+    tool="brave_web_search",
+    query="search query",
+    count=3  # Optional: limit results
+)
+```
 
-### Bedrock Agent
-- **Server**: `bedrock-agent`
-- **Tools**:
-  - `ask_agent`
-    - Arguments: `input` (required), `memoryId` (optional)
-    - Example: `mcp(server="bedrock-agent", tool="ask_agent", input="query", memoryId="session-1")`
+## Filesystem Operations
+
+### Available Tools
+
+1. **List Allowed Directories**
+   ```python
+   result = await mcp(
+       server="filesystem",
+       tool="list_allowed_directories"
+   )
+   ```
+
+2. **List Directory Contents**
+   ```python
+   result = await mcp(
+       server="filesystem",
+       tool="list_directory",
+       path="/path/to/directory"
+   )
+   ```
+
+3. **Read File**
+   ```python
+   result = await mcp(
+       server="filesystem",
+       tool="read_file",
+       path="/path/to/file"
+   )
+   ```
+
+4. **Get File Info**
+   ```python
+   result = await mcp(
+       server="filesystem",
+       tool="get_file_info",
+       path="/path/to/file"
+   )
+   ```
+
+### Allowed Directories
+- `/Users/jacob/claude_home`
+- `/Users/jacob/Library/Application Support/Claude`
 
 ## Implementation Notes
 
-### Argument Handling
-Each tool type has specific argument handling to ensure reliable operation:
+### Core Function
 ```python
-# Build arguments based on tool
-args = {}
-if tool == "brave_web_search" and query:
-    args['query'] = query
-elif tool == "ask_agent":
-    if input:
-        args['input'] = input
-    if memoryId:
-        args['memoryId'] = memoryId
+async def mcp(
+    server: str,    # Server name (e.g., "brave-search", "filesystem")
+    tool: str,      # Tool name (e.g., "brave_web_search", "read_file")
+    query: str = None,  # Search query or other text input
+    path: str = None,   # File/directory path
+    count: int = None   # Result count for search
+) -> str:
 ```
 
-### Testing
-Two test approaches are available:
-1. Direct Python testing (`test_mcp.py`)
-2. JSON validation testing (`test_mcp_json.py`)
+### Testing Strategy
 
-Both use the same test cases but different entry points.
+1. **Direct Python Testing**
+   ```bash
+   python v4/tests/test_mcp.py
+   ```
+   Tests both Brave Search and filesystem operations.
+
+2. **JSON Implementation Testing**
+   ```bash
+   python v4/tests/test_mcp_json.py
+   ```
+   Validates the JSON implementation matches Python functionality.
 
 ## Development Guidelines
 
-1. Keep tool implementations simple and focused
-2. Add explicit argument handling for each tool type
-3. Use proper async/await patterns
-4. Always test both Python and JSON implementations
+1. **Tool-Specific Features**
+   - Brave Search: Focus on query formatting and result parsing
+   - Filesystem: Ensure safe file operations within allowed directories
 
-## Adding New Tools
-When adding support for new tools:
+2. **Testing**
+   - Group tests by tool type
+   - Include both success and error cases
+   - Verify proper error handling
+   - Test with realistic inputs
 
-1. Add tool-specific argument handling
-2. Update tests for the new tool
-3. Document the tool's arguments and usage
-4. Verify both Python and JSON implementations
+3. **Error Handling**
+   - Return clear error messages
+   - Handle network issues (Brave Search)
+   - Check file permissions (Filesystem)
+   - Validate all inputs
+
+## Adding New Features
+
+When adding new features:
+
+1. Determine appropriate tool category
+2. Add tool-specific argument handling
+3. Update tests with new cases
+4. Document usage and examples
+5. Verify both Python and JSON implementations
