@@ -1,0 +1,2 @@
+Greetings from MCP!
+This is a test file.

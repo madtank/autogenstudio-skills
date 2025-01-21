@@ -1,0 +1,2 @@
+This is another test file.
+We can read multiple files.

@@ -1,103 +1,118 @@
-# AutoGen Studio Tools
+# AutoGen Studio MCP Tools
 
-## What is MCP and Why We Use It
+## What is MCP?
 
-Model Context Protocol (MCP) is like a USB port for AI tools - it provides a standardized way for AI agents to discover and use different capabilities. We chose MCP for AutoGen Studio because it enables a "discovery-first" approach where agents can:
+Model Context Protocol (MCP) is like a USB for AI tools - it provides a standardized way for AI agents to discover and use different capabilities. Think of it as plugging in new abilities for your AI agents! For more information about available MCP servers and capabilities, check out the [MCP Servers Repository](https://github.com/modelcontextprotocol/servers).
 
-1. List available tools (like looking in a toolbox)
-2. Learn about each tool's capabilities (reading the manual)
-3. Use tools effectively based on their understanding
+## Core Features
 
-### Quick Start
+Currently focused on two powerful capabilities:
 
-Getting started is as simple as installing the tools you want to use:
-```bash
-# Install the Brave Search tool
-npx @michaellatman/mcp-get@latest install @modelcontextprotocol/server-brave-search
-
-# Install the filesystem tool
-npx @michaellatman/mcp-get@latest install @modelcontextprotocol/server-filesystem
-```
-
-### Core Tools We've Integrated
-
-1. **Brave Search**
-   - Web and local search capabilities
-   - Perfect for agents to gather information
-   - Easy to use with sensible defaults
-   - Built-in content filtering
-   - Rate limiting and caching
-
-2. **Filesystem**
-   - Secure file operations
-   - Directory management
-   - File reading and metadata
-
-### Web Context Support
-
-The MCP tools include robust web context capabilities:
-
-1. **Web Search Integration**
-   - Seamless Brave Search integration
-   - Real-time web content access
-   - Context-aware search filtering
-
-2. **Web Content Processing**
-   - Automatic content extraction
-   - Smart result summarization
-   - Relevant information filtering
-
-## How It Works: Discovery-First AI Tools
-
-Our implementation lets agents learn about tools naturally:
-
+### 1. Brave Search
 ```python
-# First, agent can list available tools
-servers = await mcp(
-    server="list_available_servers"
-)
-
-# Then learn about specific tools
-tool_info = await mcp(
+# Get information from the web
+result = await mcp(
     server="brave-search",
-    tool="tool_details"
+    tool="brave_web_search",
+    query="Latest AI developments",
+    count=5
 )
 ```
 
-### Benefits
-- Agents can explore available tools on their own
-- No need to hardcode tool knowledge
-- Tools are self-documenting
-- New tools can be added without changing agent code
+### 2. File Operations
+```python
+# List allowed directories
+dirs = await mcp(
+    server="filesystem",
+    tool="list_allowed_directories"
+)
 
-### Configuration
-
-Tools can be configured through environment variables or config files:
-
-```bash
-# Brave Search configuration
-export BRAVE_API_KEY=your_key_here
-
-# Filesystem configuration
-export FS_ROOT_DIR=/path/to/allowed/directory
+# Read file contents
+content = await mcp(
+    server="filesystem",
+    tool="read_file",
+    path="/path/to/file"
+)
 ```
 
-### Troubleshooting
+## Discovery-First Design
 
-Common issues and solutions:
+Our implementation emphasizes self-discovering tools. AI agents can:
 
-1. **Tool Discovery Failed**
-   - Check if tool is installed
-   - Verify server is running
+1. List available servers:
+```python
+servers = await mcp(tool='list_available_servers')
+```
 
-2. **Permission Errors**
-   - Review configuration
-   - Check file permissions
+2. Learn about tools:
+```python
+tools = await mcp(server='server_name', tool='tool_details')
+```
 
-## Contributing
+## Configuration
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+Create a `mcp_config.json` file based on the provided example:
+```json
+{
+  "mcpServers": {
+    "brave-search": {
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "your-api-key-here"
+      }
+    },
+    "filesystem": {
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/path/to/your/working/directory"
+      ]
+    }
+  }
+}
+```
+
+## Gallery & Teams
+
+The repository includes example configurations for AutoGen Studio:
+
+- `gallerys/`: Example tool configurations and templates
+- `teams/`: Pre-configured agent teams that work with MCP tools
+
+## Development
+
+### Testing
+Run the test suite:
+```bash
+python tests/test_tools.py
+```
+
+### Adding New Tools
+1. Update `mcp_tool.py` with new functionality
+2. Add tests in `tests/test_mcp.py`
+3. Update integration in `tools/mcp.json`
+4. Add examples to gallery if appropriate
+
+## Best Practices
+
+- Always check tool availability before use
+- Get tool details to understand capabilities
+- Provide clear summaries of tool results to users
+- Handle errors gracefully
+
+## Requirements
+
+- Python 3.12+
+- Node.js and npx
+- MCP Python SDK
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) file for details.
+MIT License - See LICENSE file for details

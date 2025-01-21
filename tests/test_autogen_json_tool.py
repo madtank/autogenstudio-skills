@@ -1,3 +1,8 @@
+"""
+Test framework for autogen studio tools.
+Loads tool definitions from JSON files and provides interactive testing capabilities.
+"""
+
 import json
 import asyncio
 import os
