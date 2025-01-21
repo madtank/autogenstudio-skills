@@ -1,59 +1,103 @@
-# AutoGen Studio Skills Repository
+# AutoGen Studio Tools
 
-## Overview
-This repository houses tools and integrations for AutoGen Studio, with a focus on Model Context Protocol (MCP) integration in V4. Our implementation emphasizes discoverable, self-describing tools that AI agents can understand and use effectively.
+## What is MCP and Why We Use It
 
-## Repository Structure
+Model Context Protocol (MCP) is like a USB port for AI tools - it provides a standardized way for AI agents to discover and use different capabilities. We chose MCP for AutoGen Studio because it enables a "discovery-first" approach where agents can:
 
-### V4 Directory (`/v4`)
-Features MCP-integrated tools built on a "discovery-first" architecture:
-- Tools describe their own capabilities and parameters
-- AI agents learn tool usage through built-in discovery mechanisms
-- Focused on core capabilities with room for expansion
+1. List available tools (like looking in a toolbox)
+2. Learn about each tool's capabilities (reading the manual)
+3. Use tools effectively based on their understanding
 
-Current focus:
-- **Brave Search**: Web search capabilities
-- **Filesystem Operations**: Secure file handling
-- **Tool Discovery**: Self-describing tool interfaces
+### Quick Start
 
-### V2 Directory (`/v2`)
-Legacy tools for AutoGen Studio V2 (see v2/README.md for details)
+Getting started is as simple as installing the tools you want to use:
+```bash
+# Install the Brave Search tool
+npx @michaellatman/mcp-get@latest install @modelcontextprotocol/server-brave-search
 
-## Development Philosophy
+# Install the filesystem tool
+npx @michaellatman/mcp-get@latest install @modelcontextprotocol/server-filesystem
+```
 
-### Discovery-First Design
-Our V4 tools are built around the principle that AI agents should:
-1. Discover available tools
-2. Learn tool capabilities and parameters
-3. Use tools appropriately based on their documentation
+### Core Tools We've Integrated
 
-This approach:
-- Makes tools self-documenting
-- Reduces errors through parameter validation
-- Scales naturally as new tools are added
+1. **Brave Search**
+   - Web and local search capabilities
+   - Perfect for agents to gather information
+   - Easy to use with sensible defaults
+   - Built-in content filtering
+   - Rate limiting and caching
 
-### Development Workflow
-1. Update and test core functionality in `mcp_tool.py`
-2. Verify with Python tests (`test_mcp.py`)
-3. Update AutoGen Studio integration in `mcp.json`
-4. Validate with integration tests (`test_tools.py`)
+2. **Filesystem**
+   - Secure file operations
+   - Directory management
+   - File reading and metadata
+
+### Web Context Support
+
+The MCP tools include robust web context capabilities:
+
+1. **Web Search Integration**
+   - Seamless Brave Search integration
+   - Real-time web content access
+   - Context-aware search filtering
+
+2. **Web Content Processing**
+   - Automatic content extraction
+   - Smart result summarization
+   - Relevant information filtering
+
+## How It Works: Discovery-First AI Tools
+
+Our implementation lets agents learn about tools naturally:
+
+```python
+# First, agent can list available tools
+servers = await mcp(
+    server="list_available_servers"
+)
+
+# Then learn about specific tools
+tool_info = await mcp(
+    server="brave-search",
+    tool="tool_details"
+)
+```
+
+### Benefits
+- Agents can explore available tools on their own
+- No need to hardcode tool knowledge
+- Tools are self-documenting
+- New tools can be added without changing agent code
+
+### Configuration
+
+Tools can be configured through environment variables or config files:
+
+```bash
+# Brave Search configuration
+export BRAVE_API_KEY=your_key_here
+
+# Filesystem configuration
+export FS_ROOT_DIR=/path/to/allowed/directory
+```
+
+### Troubleshooting
+
+Common issues and solutions:
+
+1. **Tool Discovery Failed**
+   - Check if tool is installed
+   - Verify server is running
+
+2. **Permission Errors**
+   - Review configuration
+   - Check file permissions
 
 ## Contributing
 
-### Adding New Tools
-1. Start with `mcp_tool.py` for core implementation
-2. Ensure tool is self-describing through MCP
-3. Add appropriate tests
-4. Create AutoGen Studio integration
-5. Update documentation
-
-### Testing
-Each version includes specific testing tools:
-- V4: Comprehensive test suite in `test_mcp.py` and `test_tools.py`
-- V2: Individual tool test suites
-
-## Getting Started
-See `/v4/README.md` for detailed setup and usage instructions.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ## License
-This project is licensed under the terms specified in the LICENSE file.
+
+MIT License - See [LICENSE](LICENSE) file for details.

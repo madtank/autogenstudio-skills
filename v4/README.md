@@ -1,35 +1,59 @@
 # AutoGen Studio V4 Tools
 
-## Core Philosophy: Discovery-First AI Tools
+## What is MCP and Why We Use It
 
-Our V4 implementation centers on the principle that AI agents should discover and learn how to use tools through their own inquiry. This is achieved through the Model Context Protocol (MCP), which provides:
+Model Context Protocol (MCP) is like a USB port for AI tools - it provides a standardized way for AI agents to discover and use different capabilities. We chose MCP for AutoGen Studio because it enables a "discovery-first" approach where agents can:
 
-1. **Tool Discovery**: Agents can list available tools
-2. **Self-Documentation**: Each tool describes its parameters and usage
-3. **Runtime Learning**: Agents understand tools by examining their descriptions
+1. List available tools (like looking in a toolbox)
+2. Learn about each tool's capabilities (reading the manual)
+3. Use tools effectively based on their understanding
 
-### Why This Matters
-- Agents adapt to new tools without code changes
-- Tools are self-documenting and self-validating
-- Development is more maintainable and scalable
+### Installing MCP Tools
 
-## Current Implementation
+Getting started is as simple as installing the tools you want to use:
 
-### Core Features
-1. **Tool Discovery**
-   - List available servers
-   - Get detailed tool descriptions
-   - Understand parameter requirements
+```bash
+# Install the Brave Search tool
+npx @michaellatman/mcp-get@latest install @modelcontextprotocol/server-brave-search
 
-2. **Brave Search**
-   - Web search capabilities
-   - Parameter validation
-   - Result summarization
+# Install the filesystem tool
+npx @michaellatman/mcp-get@latest install @modelcontextprotocol/server-filesystem
+```
 
-3. **Filesystem Operations**
-   - Secure file access
+### Core Tools We've Integrated
+
+1. **Brave Search**
+   - Web and local search capabilities
+   - Perfect for agents to gather information
+   - Easy to use with sensible defaults
+
+2. **Filesystem**
+   - Secure file operations
    - Directory management
-   - File metadata
+   - File reading and metadata
+
+## How It Works: Discovery-First AI Tools
+
+Our implementation lets agents learn about tools naturally:
+
+```python
+# First, agent can list available servers
+servers = await mcp(
+    server="list_available_servers"
+)
+
+# Then learn about specific tools
+tool_info = await mcp(
+    server="brave-search",
+    tool="tool_details"
+)
+```
+
+### Why Discovery-First Matters
+- Agents can explore available tools on their own
+- No need to hardcode tool knowledge
+- Tools are self-documenting
+- New tools can be added without changing agent code
 
 ## Development Workflow
 
