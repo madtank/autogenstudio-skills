@@ -47,6 +47,10 @@ mcp_config.json
 *.manifest
 *.spec
 
+# MCP Test Workspace
+mcp_workspace/*
+!mcp_workspace/.gitkeep
+
 # Misc
 .DS_Store
 Thumbs.db
