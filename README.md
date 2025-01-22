@@ -4,6 +4,23 @@
 
 Model Context Protocol (MCP) is like a USB for AI tools - it provides a standardized way for AI agents to discover and use different capabilities. Think of it as plugging in new abilities for your AI agents! With our flexible dictionary-based implementation, agents can easily discover and use tools without needing to know their implementation details.
 
+### Available MCP Servers
+
+The MCP ecosystem is growing rapidly with many powerful servers available:
+
+- **Brave Search** - Web and local search capabilities
+- **Filesystem** - Complete file and directory operations
+- **Playwright** - Browser automation and web scraping
+- **MongoDB** - Direct database interactions
+- **Sequential Thinking** - Structured reasoning and planning
+- **FLUX** - Image generation and manipulation
+- **Selenium** - Web automation and testing
+- **SQLite** - Local database operations
+- **Vector Store** - Embedding and similarity search
+- **And many more!**
+
+Check out the [MCP Servers Repository](https://github.com/modelcontextprotocol/servers) for the latest list of available servers. The ecosystem is rapidly growing with new capabilities being added regularly!
+
 ## Quick Start
 
 1. **Install Requirements**:
