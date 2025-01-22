@@ -2,66 +2,32 @@
 
 ## What is MCP?
 
-Model Context Protocol (MCP) is like a USB for AI tools - it provides a standardized way for AI agents to discover and use different capabilities. Think of it as plugging in new abilities for your AI agents! For more information about available MCP servers and capabilities, check out the [MCP Servers Repository](https://github.com/modelcontextprotocol/servers).
+Model Context Protocol (MCP) is like a USB for AI tools - it provides a standardized way for AI agents to discover and use different capabilities. Think of it as plugging in new abilities for your AI agents! With our flexible dictionary-based implementation, agents can easily discover and use tools without needing to know their implementation details.
 
-## Core Features
+## Quick Start
 
-Currently focused on two powerful capabilities:
+1. **Install Requirements**:
+```bash
+# Create and activate virtual environment
+python -m venv .env
+source .env/bin/activate  # On Windows: .env\Scripts\activate
 
-### 1. Brave Search
-```python
-# Get information from the web
-result = await mcp(
-    server="brave-search",
-    tool="brave_web_search",
-    query="Latest AI developments",
-    count=5
-)
+# Install required packages
+pip install mcp
 ```
 
-### 2. File Operations
-```python
-# List allowed directories
-dirs = await mcp(
-    server="filesystem",
-    tool="list_allowed_directories"
-)
+2. **Configure MCP**:
+```bash
+# Copy the example config
+cp mcp_config.example.json mcp_config.json
 
-# Read file contents
-content = await mcp(
-    server="filesystem",
-    tool="read_file",
-    path="/path/to/file"
-)
-```
-
-## Discovery-First Design
-
-Our implementation emphasizes self-discovering tools. AI agents can:
-
-1. List available servers:
-```python
-servers = await mcp(tool='list_available_servers')
-```
-
-2. Learn about tools:
-```python
-tools = await mcp(server='server_name', tool='tool_details')
-```
-
-## Configuration
-
-Create a `mcp_config.json` file based on the provided example:
-```json
+# Edit mcp_config.json with your settings
 {
   "mcpServers": {
     "brave-search": {
       "enabled": true,
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-brave-search"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
       "env": {
         "BRAVE_API_KEY": "your-api-key-here"
       }
@@ -79,39 +45,108 @@ Create a `mcp_config.json` file based on the provided example:
 }
 ```
 
-## Gallery & Teams
+3. **Start AutoGen Studio**:
+```bash
+autogenstudio ui --port 8080
+```
 
-The repository includes example configurations for AutoGen Studio:
+## Dynamic Tool Usage
 
-- `gallerys/`: Example tool configurations and templates
-- `teams/`: Pre-configured agent teams that work with MCP tools
+Our implementation uses a flexible dictionary-based approach, making it easy to discover and use tools:
+
+```python
+# 1. List Available Servers
+servers = await mcp(tool='list_available_servers')
+
+# 2. Discover Server Tools
+tools = await mcp(
+    server='brave-search',
+    tool='tool_details'
+)
+
+# 3. Use Tools with Dictionary Arguments
+# Web Search Example
+result = await mcp(
+    server='brave-search',
+    tool='brave_web_search',
+    arguments={
+        'query': 'Latest AI developments',
+        'count': 5
+    }
+)
+
+# File Operations Example
+result = await mcp(
+    server='filesystem',
+    tool='read_file',
+    arguments={
+        'path': '/path/to/your/file'
+    }
+)
+```
+
+## Example Templates
+
+We provide ready-to-use templates to help you get started:
+
+1. **Gallery Examples** (`/gallerys`):
+   - Pre-configured tool setups
+   - Example implementations
+   - Best practices demonstrations
+
+2. **Team Templates** (`/teams`):
+   - Complete agent workflows
+   - Tool integration examples
+   - Task-specific configurations
+
+To use a template:
+1. Copy the desired template from `/gallerys` or `/teams`
+2. Customize the JSON configuration for your needs
+3. Load it in AutoGen Studio
+
+## Available Tools
+
+### 1. Brave Search
+- Web search capabilities
+- Local business search
+- Configurable result limits
+- Fresh content filtering
+
+### 2. File Operations
+- Read/Write files
+- Directory operations
+- File searches
+- Metadata operations
+
+### 3. More Coming Soon
+The MCP ecosystem is constantly growing. Add new servers to your config to expand capabilities!
+
+## Configuration Locations
+
+The MCP client checks these locations for config files:
+
+1. Current directory: `./mcp_config.json`
+2. User config: `~/.config/autogen/mcp_config.json`
+3. Environment: `$MCP_CONFIG_PATH`
 
 ## Development
 
 ### Testing
 Run the test suite:
 ```bash
-python tests/test_tools.py
+pytest tests/test_mcp_client.py -v
+pytest tests/test_mcp_json.py -v
 ```
 
-### Adding New Tools
-1. Update `mcp_tool.py` with new functionality
-2. Add tests in `tests/test_mcp.py`
-3. Update integration in `tools/mcp.json`
-4. Add examples to gallery if appropriate
-
-## Best Practices
-
-- Always check tool availability before use
-- Get tool details to understand capabilities
-- Provide clear summaries of tool results to users
-- Handle errors gracefully
+### Workspace
+The `/mcp_workspace` directory is provided for testing but ignored by git. Your tests will create this automatically.
 
 ## Requirements
 
 - Python 3.12+
 - Node.js and npx
 - MCP Python SDK
+- AutoGen Studio
 
 ## License
 

@@ -1,7 +1,0 @@
-{
-  "component_type": "tool",
-  "name": "calculator",
-  "description": "A simple calculator that performs basic arithmetic operations between two numbers",
-  "content": "def calculator(a: float, b: float, operator: str) -> str:\n    try:\n        if operator == '+':\n            return str(a + b)\n        elif operator == '-':\n            return str(a - b)\n        elif operator == '*':\n            return str(a * b)\n        elif operator == '/':\n            if b == 0:\n                return 'Error: Division by zero'\n            return str(a / b)\n        else:\n            return 'Error: Invalid operator. Please use +, -, *, or /'\n    except Exception as e:\n        return f'Error: {str(e)}'",
-  "tool_type": "PythonFunction"
-}
